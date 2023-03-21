@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Eventual bank balance validator
+  
+Globals:
+  Function:
+    Timeout: 10
+
+Resources:
+  BalanceValidatorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dynamo-handler/
+      Handler: app.handler
+      Runtime: nodejs18.x
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ItemsTable
+      Events:
+        CreateOrUpdateItem:
+          Type: HttpApi
+          Properties:
+            Path: /validate
+            Method: GET
+
+  ItemsTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: account_id
+        Type: Number
+      TableName: account
+
+Outputs:
+  ApiEndpoint:
+    Description: "The invoke URL for the HTTP API, using GET"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/validate"
+  Function:
+    Description: "Balance validator function ARN"
+    Value: !GetAtt BalanceValidatorFunction.Arn
