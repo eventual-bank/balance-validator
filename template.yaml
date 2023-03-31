@@ -16,21 +16,13 @@ Resources:
       Runtime: nodejs18.x
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: !Ref ItemsTable
+            TableName: account
       Events:
         CreateOrUpdateItem:
           Type: HttpApi
           Properties:
             Path: /validate
             Method: GET
-
-  ItemsTable:
-    Type: AWS::Serverless::SimpleTable
-    Properties:
-      PrimaryKey:
-        Name: account_id
-        Type: Number
-      TableName: account
 
 Outputs:
   ApiEndpoint:
