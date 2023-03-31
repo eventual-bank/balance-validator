@@ -18,7 +18,7 @@ const tableName = "account";
 // CloudWatch
 
 import  { CloudWatchClient } from "@aws-sdk/client-cloudwatch";
-import { PutMetricDataCommand } from "@aws-sdk/client-cloudwatch;
+import { PutMetricDataCommand } from "@aws-sdk/client-cloudwatch";
 
 const REGION = "us-east-1"
 const cloudWatch = new CloudWatchClient({ region: REGION });
@@ -40,6 +40,8 @@ async function sendBalanceMetric(balance) {
     Namespace: "event_bank",
   };  
 
+  console.log ("Sending Balance: ", balance);
+
   const data = await cloudWatch.send(new PutMetricDataCommand(params));
   console.log("Success", data.$metadata.requestId);
 }
@@ -57,8 +59,6 @@ export const handler = async (event, context) => {
     );
     body = body.Items;
     body = body.reduce((a,b) => a+b.balance, 0)
-
-    console.log ("sendBalanceMetric: ", typeof sendBalanceMetric)
 
     await sendBalanceMetric(body)
   } catch (err) {

@@ -17,6 +17,7 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: account
+        - CloudWatchPutMetricPolicy: {}
       Events:
         CreateOrUpdateItem:
           Type: HttpApi
