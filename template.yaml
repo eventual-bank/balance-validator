@@ -19,6 +19,11 @@ Resources:
             TableName: account
         - CloudWatchPutMetricPolicy: {}
       Events:
+        ScheduleEvent:
+          Type: ScheduleV2
+          Properties:
+            ScheduleExpression: "rate(5 minutes)"
+
         CreateOrUpdateItem:
           Type: HttpApi
           Properties:
