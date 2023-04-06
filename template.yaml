@@ -22,7 +22,7 @@ Resources:
         ScheduleEvent:
           Type: ScheduleV2
           Properties:
-            ScheduleExpression: "rate(5 minutes)"
+            ScheduleExpression: "rate(1 minute)"
 
         CreateOrUpdateItem:
           Type: HttpApi
